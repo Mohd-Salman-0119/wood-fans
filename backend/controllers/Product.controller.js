@@ -37,31 +37,6 @@ const addProductIntoCart = asyncHandler(async (req, res) => {
      }
 
 })
-const addProductIntoWishlist = asyncHandler(async (req, res) => {
-     const productId = req.params.ID;
-
-     try {
-          const userId = req.userID;
-          const user = await UserModel.findById(userId);
-
-          const existingCartItem = user.wishlist.find(item => item.equals(productId));
-
-          if (!existingCartItem) {
-               user?.wishlist?.push(productId);
-          } else {
-               res.send({ msg: `Product is already added in the wishlist` })
-          }
-
-          await user.save();
-
-          res.send({ msg: `Product added to wishlist successfully` });
-
-     } catch (error) {
-          res.status(500).send({ msg: "Something went wrong, cannot add the product to the cart" });
-          console.log(error);
-     }
-})
-
 const removeProductFromCart = asyncHandler(async (req, res) => {
      const productId = req.params.ID;
 
@@ -88,6 +63,32 @@ const removeProductFromCart = asyncHandler(async (req, res) => {
           console.log(error);
      }
 })
+const addProductIntoWishlist = asyncHandler(async (req, res) => {
+     const productId = req.params.ID;
+
+     try {
+          const userId = req.userID;
+          const user = await UserModel.findById(userId);
+
+          const existingCartItem = user.wishlist.find(item => item.equals(productId));
+
+          if (!existingCartItem) {
+               user?.wishlist?.push(productId);
+          } else {
+               res.send({ msg: `Product is already added in the wishlist` })
+          }
+
+          await user.save();
+
+          res.send({ msg: `Product added to wishlist successfully` });
+
+     } catch (error) {
+          res.status(500).send({ msg: "Something went wrong, cannot add the product to the cart" });
+          console.log(error);
+     }
+})
+
+
 const removeProductFromWishlist = asyncHandler(async (req, res) => {
      const productId = req.params.ID;
 
@@ -115,4 +116,40 @@ const removeProductFromWishlist = asyncHandler(async (req, res) => {
      }
 })
 
-module.exports = { getProductController, addProductIntoCart, removeProductFromCart, addProductIntoWishlist,removeProductFromWishlist }
+const getCartController = asyncHandler(async (req, res) => {
+     try {
+          const userId = req.userID;
+          const user = await UserModel.findById(userId);
+          console.log(userId)
+
+          if (user) {
+               const cart = user?.cart;
+               res.send(cart)
+          } else {
+               res.status(400).send({ msg: "Cart not found in the user" })
+          }
+
+     } catch (error) {
+          res.status(500).send({ msg: "Something went wrong, cannot get cart Items" });
+          console.log(error);
+     }
+})
+
+const getWishListController = asyncHandler(async (req, res) => {
+     try {
+          const userId = req.userID;
+          const user = await UserModel.findById(userId)
+
+          if (user) {
+               const wishlist = user?.wishlist;
+               res.send(wishlist)
+          } else {
+               res.status(400).send({ msg: "WishList not found in the user" })
+          }
+
+     } catch (error) {
+          res.status(500).send({ msg: "Something went wrong, cannot get wishlist Items" });
+          console.log(error);
+     }
+})
+module.exports = { getProductController, addProductIntoCart, removeProductFromCart, addProductIntoWishlist, removeProductFromWishlist, getCartController, getWishListController }
