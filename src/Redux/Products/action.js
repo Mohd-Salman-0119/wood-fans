@@ -19,13 +19,15 @@ export const fetchData = () => async (dispatch) => {
             tempData.push({ ...product.data(), id: product.id });
         });
         */
-        const res = await axios.get(`${BASE_URI}/api/products`);
-        console.log(res)
-        dispatch(getDataSuccess());
+        const res = await axios.get(`${BASE_URI}/products`);
+
+        dispatch(getDataSuccess(res.data));
     } catch (error) {
         dispatch(getDataFailure(error));
     }
 };
+
+
 
 // Do not use in cart page.
 export const addToCart = (productId, userId) => async (dispatch) => {
@@ -55,14 +57,23 @@ export const getCartDataRequest = () => ({ type: CART_GET_REQUEST });
 export const getCartDataSuccess = (data) => ({ type: CART_GET_SUCCESS, payload: data });
 export const getCartDataFailure = (error) => ({ type: CART_GET_FAILURE, payload: error });
 
-export const fetchCartData = (userId) => async (dispatch) => {
+export const fetchCartData = (userId, token) => async (dispatch) => {
     dispatch(getCartDataRequest());
     try {
+
         const userRef = doc(storeDB, 'users', userId);
         const userSnap = await getDoc(userRef);
         const userData = userSnap.data();
         const cartData = userData.cart;
-        dispatch(getCartDataSuccess(cartData));
+
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }
+        const res = await axios.get(`${BASE_URI}/products/cart`, config)
+        console.log(res)
+        dispatch(getCartDataSuccess(res.data));
     } catch (error) {
         console.log(error);
         dispatch(getCartDataFailure(error));

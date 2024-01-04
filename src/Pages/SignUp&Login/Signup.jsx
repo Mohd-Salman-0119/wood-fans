@@ -5,6 +5,7 @@ import { faEnvelope, faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { signUpNewUser } from "../../Redux/Auth/action";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Signup = ({ onClick }) => {
   const [email, setEmail] = useState("");
@@ -13,6 +14,12 @@ const Signup = ({ onClick }) => {
   const [name, setName] = useState("");
 
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const redirectToHome = () => {
+    navigate("/");
+  };
 
   const theme = useSelector((store) => store.themeReducer.theme);
 
@@ -33,7 +40,7 @@ const Signup = ({ onClick }) => {
     if (!email && !name && !password) {
       toast.info("Fill all the feild.");
     }
-    dispatch(signUpNewUser(email, password, name));
+    dispatch(signUpNewUser(email, password, name, redirectToHome));
   };
 
   return (

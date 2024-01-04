@@ -8,10 +8,10 @@ import { toast } from "react-toastify";
 import { stringify } from "postcss";
 import { useNavigate } from "react-router-dom";
 
-
 const Login = ({ onClick }) => {
   const theme = useSelector((store) => store.themeReducer.theme);
-
+  const token = useSelector((store) => store.authReducer.token);
+  console.log(token);
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,7 +28,6 @@ const Login = ({ onClick }) => {
 
     dispatch(loginWithEmailAndPassword(email, password, redirectToHome));
 
-   
     // RememberMe functionalites
     /*
     if (rememberMe) {
@@ -90,7 +89,6 @@ const Login = ({ onClick }) => {
         type="button"
         onClick={onClick}
       />
-   
     </>
   );
 };

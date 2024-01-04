@@ -1,7 +1,8 @@
-import { FORGOT_PASSWORD_FAILURE, LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS, FORGOT_PASSWORD_SUCCESS, SET_USER_DATA_REQUEST, SET_USER_DATA_SUCCESS, SET_USER_DATA_FAILURE } from "./actionType"
+import { FORGOT_PASSWORD_FAILURE, LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS, FORGOT_PASSWORD_SUCCESS, SET_USER_DATA_REQUEST, SET_USER_DATA_SUCCESS, SET_USER_DATA_FAILURE } from "./actionType"
 
 const initalState = {
      isAuth: false,
+     token: null,
      successMessage: "",
      errorMessage: "",
      loading: false,
@@ -19,34 +20,17 @@ export const authReducer = (state = initalState, { type, payload }) => {
                return {
                     ...state,
                     isAuth: true,
-                    successMessage: payload,
+                    successMessage: 'Login successful.',
+                    token: payload,
                     loading: false
                }
           case LOGIN_FAILURE:
                return {
                     ...state,
                     loading: false,
-                    errorMessage: payload
+                    errorMessage: 'error'
                }
 
-          case SIGN_UP_REQUEST:
-               return {
-                    ...state,
-                    loading: true
-               }
-          case SIGN_UP_SUCCESS:
-               return {
-                    ...state,
-                    isAuth: true,
-                    successMessage: payload,
-                    loading: false
-               }
-          case SIGN_UP_FAILURE:
-               return {
-                    ...state,
-                    loading: false,
-                    errorMessage: payload
-               }
           case FORGOT_PASSWORD_FAILURE:
                return {
                     ...state,

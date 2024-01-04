@@ -9,6 +9,8 @@ import PhotoGallery from "../Components/Homepage/PhotoGallery";
 import ContactUs from "../Components/Homepage/ContactUs";
 import ClientsReviews from "../Components/Common/ClientsReviews";
 function Home() {
+  const token = useSelector((store) => store.authReducer.token);
+  console.log(token);
   return (
     <div>
       <Hero />

@@ -23,13 +23,18 @@ import { useEffect } from "react";
 import { storeDB, getDoc, auth, doc } from "../Services/firebaseConfig";
 import { useState } from "react";
 import PopupMessage from "../Components/Common/PopupMessage";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart, fetchCartData } from "../Redux/Products/action";
+import axios from "axios";
+import { BASE_URI } from "../Redux/api";
 const sizeArray = ["Big", "Average", "Small"];
 const quantityArray = [1, 2, 3, 4];
 
 const SingleProduct = () => {
   const { id } = useParams();
+  console.log(id);
+
+  const token = localStorage.getItem("userToken");
 
   const userId = auth?.currentUser?.uid;
   const dispatch = useDispatch();
@@ -40,16 +45,16 @@ const SingleProduct = () => {
   const [mainImage, setMainImage] = useState(image[0]);
   const productId = id;
 
-  const handleAddToCart = (productId, userId, buttonType) => {
-    if (userId) {
+  const handleAddToCart = (productId, token, buttonType) => {
+    if (token) {
       if (buttonType === "add to cart") {
         dispatch(addToCart(productId, userId));
-        dispatch(fetchCartData(userId));
+        dispatch(fetchCartData(userId, token));
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 1000);
       } else {
         dispatch(addToCart(productId, userId));
-        dispatch(fetchCartData(userId));
+        dispatch(fetchCartData(userId, token));
         navigate("/cart");
       }
     } else {
@@ -60,19 +65,10 @@ const SingleProduct = () => {
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const productDocRef = doc(storeDB, "products", productId);
-        const productDocSnapshot = await getDoc(productDocRef);
-        
-        if (productDocSnapshot.exists()) {
-          setProductData({ id: productId, ...productDocSnapshot.data()});
-          setImage(productDocSnapshot.data().images);
-          setMainImage(productDocSnapshot.data().images[0]);
-         
-        } else {
-          console.log("No such document!");
-        }
+        const { data } = await axios.get(`${BASE_URI}/products/${productId}`);
+        console.log(data);
       } catch (error) {
-        console.error("Error fetching product data:", error);
+        console.log("error", error);
       }
     };
 
@@ -186,7 +182,6 @@ const SingleProduct = () => {
           {/* Filters */}
           <PopUpSelector />
           <div className="grid grid-cols-2 mt-5 gap-2 text-xs sm:text-base">
-
             <DropDwonSelector data={sizeArray} purpose={"Select Size"} />
             <DropDwonSelector
               data={quantityArray}
