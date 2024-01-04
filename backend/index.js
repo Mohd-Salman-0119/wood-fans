@@ -1,12 +1,17 @@
-const { express } = require("./imports/modules.imports")
+const { express, cors } = require("./imports/modules.imports")
 const { connectDB } = require("./imports/configs.imports")
-const { productRoutes, authRoutes } = require("./imports/routes.imports")
 const { authorize } = require("./imports/middleware.imports")
+const { productRoutes, authRoutes } = require("./imports/routes.imports")
 
 const app = express();
 
 // middleware's
 app.use(express.json())
+app.use(cors(
+     {
+          origin: '*'
+     }
+))
 app.use("/ping", (req, res) => {
      res.send({ msg: "Pong" });
 })
