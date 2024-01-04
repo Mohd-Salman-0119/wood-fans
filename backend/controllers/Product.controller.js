@@ -4,7 +4,7 @@ const { ProductModel, UserModel } = require('../imports/models.imports')
 const getProductController = asyncHandler(async (req, res) => {
      try {
           const products = await ProductModel.find();
-          res.send({ products })
+          res.send(products)
      } catch (error) {
           res.send({ msg: "Something went wrong, Cannot get products" })
      }
