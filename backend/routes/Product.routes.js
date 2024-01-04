@@ -8,6 +8,11 @@ const { addProductIntoCart, removeProductFromCart, getProductController, addProd
 
 const productRoutes = express.Router();
 
+
+productRoutes.route("/cart").get(authorize, getCartController)
+productRoutes.route("/wishlist").get(authorize, getWishListController)
+
+
 productRoutes.route('/').get(getProductController);
 productRoutes.route('/:ID').get(getSingleProduct);
 
@@ -18,8 +23,7 @@ productRoutes.route("/cart/:ID").delete(authorize, removeProductFromCart)
 productRoutes.route("/wishlist/:ID").post(authorize, addProductIntoWishlist)
 productRoutes.route("/wishlist/:ID").delete(authorize, removeProductFromWishlist)
 
-productRoutes.route("/cart").get(authorize, getCartController)
-productRoutes.route("/wishlist").get(authorize, getWishListController)
+
 
 
 

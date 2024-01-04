@@ -30,23 +30,16 @@ export const fetchData = () => async (dispatch) => {
 
 
 // Do not use in cart page.
-export const addToCart = (productId, userId) => async (dispatch) => {
+export const addToCart = (productId, token) => async (dispatch) => {
     try {
-        const userRef = doc(storeDB, 'users', userId);
-        const userSnap = await getDoc(userRef);
-        const userData = userSnap.data();
-        const cart = userData.cart;
-        const cartItem = cart.find(item => item.productId === productId);
-
-        if (cartItem) {
-            cartItem.quantity += 1;
-            await updateDoc(userRef, { cart: cart });
-        } else {
-            await updateDoc(userRef, {
-                cart: arrayUnion({ productId, quantity: 1 })
-            });
+        const config = {
+            headers: {
+                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NTk0NTZkZDNkM2Y4YjdlYmQwZWU2NjEiLCJpYXQiOjE3MDQzNzIxOTR9.CctDSpxm0F7CLB-ieK-MzYLIhs1DrGpcgh8tE2OK280`
+            }
         }
-        dispatch(fetchCartData(userId));
+        const { data } = await axios.post(`${BASE_URI}/products/cart/${productId}`, {}, config)
+        console.log(data)
+        dispatch(fetchCartData());
     } catch (error) {
         console.log(error);
     }
@@ -61,17 +54,12 @@ export const fetchCartData = (userId, token) => async (dispatch) => {
     dispatch(getCartDataRequest());
     try {
 
-        const userRef = doc(storeDB, 'users', userId);
-        const userSnap = await getDoc(userRef);
-        const userData = userSnap.data();
-        const cartData = userData.cart;
-
         const config = {
             headers: {
-                "Authorization": `Bearer ${token}`
+                "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NTk0NTZkZDNkM2Y4YjdlYmQwZWU2NjEiLCJpYXQiOjE3MDQzNzIxOTR9.CctDSpxm0F7CLB-ieK-MzYLIhs1DrGpcgh8tE2OK280`
             }
         }
-        const res = await axios.get(`${BASE_URI}/products/cart`, config)
+        const res = await axios.get(`${BASE_URI}/products/cart`, config); // Fix here
         console.log(res)
         dispatch(getCartDataSuccess(res.data));
     } catch (error) {

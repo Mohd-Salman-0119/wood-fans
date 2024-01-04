@@ -32,7 +32,6 @@ const quantityArray = [1, 2, 3, 4];
 
 const SingleProduct = () => {
   const { id } = useParams();
-  console.log(id);
 
   const token = localStorage.getItem("userToken");
 
@@ -48,12 +47,12 @@ const SingleProduct = () => {
   const handleAddToCart = (productId, token, buttonType) => {
     if (token) {
       if (buttonType === "add to cart") {
-        dispatch(addToCart(productId, userId));
+        dispatch(addToCart(productId, token));
         dispatch(fetchCartData(userId, token));
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 1000);
       } else {
-        dispatch(addToCart(productId, userId));
+        dispatch(addToCart(productId, token));
         dispatch(fetchCartData(userId, token));
         navigate("/cart");
       }
@@ -66,9 +65,11 @@ const SingleProduct = () => {
     const fetchProductData = async () => {
       try {
         const { data } = await axios.get(`${BASE_URI}/products/${productId}`);
-        console.log(data);
+        setProductData(data);
+        setImage(data?.images);
+        setMainImage(data?.images[0]);
       } catch (error) {
-        console.log("error", error);
+        console.log("Error fetching product data:", error);
       }
     };
 

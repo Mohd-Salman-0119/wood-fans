@@ -10,6 +10,15 @@ const getProductController = asyncHandler(async (req, res) => {
      }
 })
 
+const getSingleProduct = asyncHandler(async (req, res) => {
+     const ID = req.params.ID;
+     try {
+          const products = await ProductModel.findOne({_id: ID});
+          res.send(products)
+     } catch (error) {
+          res.send({ msg: "Something went wrong, Cannot get a products" })
+     }
+})
 const addProductIntoCart = asyncHandler(async (req, res) => {
      const productId = req.params.ID;
 
@@ -153,13 +162,4 @@ const getWishListController = asyncHandler(async (req, res) => {
      }
 })
 
-const getSingleProduct = asyncHandler(async (req, res) => {
-     const ID = req.params.ID;
-     try {
-          const products = await ProductModel.findById(ID);
-          res.send(products)
-     } catch (error) {
-          res.send({ msg: "Something went wrong, Cannot get products" })
-     }
-})
 module.exports = { getProductController, addProductIntoCart, removeProductFromCart, addProductIntoWishlist, removeProductFromWishlist, getCartController, getWishListController,getSingleProduct }
