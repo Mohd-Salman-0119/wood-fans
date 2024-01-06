@@ -31,6 +31,7 @@ function SingleProductCard({ product, redirectToDetail }) {
   const handleAddToCart = (productId, token) => {
     if (token) {
       dispatch(addToCart(productId, token));
+      dispatch(fetchCartData(token));
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 1000);
     } else {

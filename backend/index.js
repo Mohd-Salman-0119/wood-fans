@@ -7,11 +7,7 @@ const app = express();
 
 // middleware's
 app.use(express.json())
-app.use(cors(
-     {
-          origin: '*'
-     }
-))
+app.use(cors())
 app.use("/ping", (req, res) => {
      res.send({ msg: "Pong" });
 })
