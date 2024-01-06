@@ -40,7 +40,7 @@ export async function fetchUserData(setUid, setUserData) {
     return unsubscribe;
 }
 
-
+/*
 export const fetchSingleProductData = async (productId, setMainImg, setItemData) => {
     try {
         const productDocRef = doc(storeDB, "products", productId);
@@ -55,7 +55,7 @@ export const fetchSingleProductData = async (productId, setMainImg, setItemData)
         console.error("Error fetching product data:", error);
     }
 };
-
+*/
 export const fetchPricesAndCalculateSubtotal = async (cartData, setSubtotalValue, setCartTotal) => {
     try {
         let subtotal = 0;

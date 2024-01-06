@@ -15,12 +15,11 @@ import {
 import PopupMessage from "../Common/PopupMessage";
 import { useEffect } from "react";
 function SingleProductCard({ product, redirectToDetail }) {
-  
   const [wishListClicked, setWishListClicked] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const productId = product._id;
-  const userId = auth?.currentUser?.uid;
+  const token = useSelector((store) => store.authReducer.token);
   const [showPopup, setShowPopup] = useState(false);
 
   const { wishlistData, loading } = useSelector(
@@ -29,9 +28,9 @@ function SingleProductCard({ product, redirectToDetail }) {
   const changeWishListState = () => {
     setWishListClicked((pre) => !pre);
   };
-  const handleAddToCart = (productId, userId) => {
-    if (userId) {
-      dispatch(addToCart(productId, userId));
+  const handleAddToCart = (productId, token) => {
+    if (token) {
+      dispatch(addToCart(productId, token));
       setShowPopup(true);
       setTimeout(() => setShowPopup(false), 1000);
     } else {
@@ -39,12 +38,12 @@ function SingleProductCard({ product, redirectToDetail }) {
     }
   };
 
-  const handleAddToWishList = (productId, userId) => {
-    if (userId) {
+  const handleAddToWishList = (productId, token) => {
+    if (token) {
       if (wishListClicked) {
-        dispatch(removeFromWishlist(productId, userId));
+        dispatch(removeFromWishlist(productId, token));
       } else {
-        dispatch(addToWishlist(productId, userId));
+        dispatch(addToWishlist(productId, token));
       }
       changeWishListState();
     } else {
@@ -53,10 +52,10 @@ function SingleProductCard({ product, redirectToDetail }) {
   };
 
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchWishlistData(userId));
+    if (token) {
+      dispatch(fetchWishlistData(token));
     }
-  }, [userId, dispatch]);
+  }, [token, dispatch]);
 
   useEffect(() => {
     if (!loading) {
@@ -77,7 +76,7 @@ function SingleProductCard({ product, redirectToDetail }) {
               } fa-heart text-xl cursor-pointer opacity-100 ${
                 wishListClicked ? "text-red-400" : "text-gray-700"
               }`}
-              onClick={() => handleAddToWishList(productId, userId)}
+              onClick={() => handleAddToWishList(productId, token)}
             ></i>
           </div>
 
@@ -101,7 +100,7 @@ function SingleProductCard({ product, redirectToDetail }) {
       </div>
       <div
         className="flex justify-between lg:p-4 p-2 hover:cursor-pointer"
-        onClick={() => handleAddToCart(productId, userId)}
+        onClick={() => handleAddToCart(productId, token)}
       >
         <Button
           text={"Add to Cart"}

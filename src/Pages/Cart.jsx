@@ -9,6 +9,8 @@ import { fetchPricesAndCalculateSubtotal } from "../Components/Common/common";
 
 const cart = () => {
   const { cartData } = useSelector((store) => store.cartReducer);
+ 
+
   const dispatch = useDispatch();
   const [cartItemsCount, setcartItemsCount] = useState(0);
   const [cartEmpty, setCartEmpty] = useState(true);
@@ -17,6 +19,7 @@ const cart = () => {
   const [cartTotal, setCartTotal] = useState(0);
   const [coupon, setCoupon] = useState("");
   const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
 
   const handleCouponChange = (couponCode, subtotal) => {
@@ -37,11 +40,11 @@ const cart = () => {
     fetchPricesAndCalculateSubtotal(cartData, setSubtotalValue, setCartTotal);
   }, [cartData]);
 
-  const btnOnClick = (action, id, userId) => {
+  const btnOnClick = (action, id, token) => {
     if (action === "Remove") {
-      dispatch(removeFromCart(id, userId));
+      dispatch(removeFromCart(id, token));
     } else if (action === "Wishlist") {
-      dispatch(removeFromCart(id, userId, true));
+      dispatch(removeFromCart(id, token, true));
     }
   };
 

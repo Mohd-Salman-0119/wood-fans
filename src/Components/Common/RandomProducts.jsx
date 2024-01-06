@@ -26,7 +26,7 @@ function RandomProducts({ selected }) {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
         {currentProducts?.map((product) => (
           <SingleProductCard
-            key={product.id}
+            key={product._id}
             product={product}
             redirectToDetail={redirectToDetail}
           />

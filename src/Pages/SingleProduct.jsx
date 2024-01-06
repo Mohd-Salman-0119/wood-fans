@@ -32,8 +32,7 @@ const quantityArray = [1, 2, 3, 4];
 
 const SingleProduct = () => {
   const { id } = useParams();
-
-  const token = localStorage.getItem("userToken");
+  const token = useSelector((store) => store.authReducer.token);
 
   const userId = auth?.currentUser?.uid;
   const dispatch = useDispatch();
@@ -41,19 +40,19 @@ const SingleProduct = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [productData, setProductData] = useState({});
   const [image, setImage] = useState([]);
-  const [mainImage, setMainImage] = useState(image[0]);
+  const [mainImage, setMainImage] = useState("");
   const productId = id;
 
   const handleAddToCart = (productId, token, buttonType) => {
     if (token) {
       if (buttonType === "add to cart") {
         dispatch(addToCart(productId, token));
-        dispatch(fetchCartData(userId, token));
+        dispatch(fetchCartData(token));
         setShowPopup(true);
         setTimeout(() => setShowPopup(false), 1000);
       } else {
         dispatch(addToCart(productId, token));
-        dispatch(fetchCartData(userId, token));
+        dispatch(fetchCartData(token));
         navigate("/cart");
       }
     } else {
@@ -107,7 +106,7 @@ const SingleProduct = () => {
               <div className="grid grid-cols-2 gap-4 justify-center">
                 <div
                   onClick={() =>
-                    handleAddToCart(productId, userId, "add to cart")
+                    handleAddToCart(productId, token, "add to cart")
                   }
                   className="hover:cursor-pointer"
                 >

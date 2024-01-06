@@ -9,13 +9,14 @@ import PhotoGallery from "../Components/Homepage/PhotoGallery";
 import ContactUs from "../Components/Homepage/ContactUs";
 import ClientsReviews from "../Components/Common/ClientsReviews";
 function Home() {
-  const token = useSelector((store) => store.authReducer.token);
-  console.log(token);
+  const isAuth = useSelector((store) => store.authReducer.isAuth);
+
+  console.log(isAuth);
   return (
     <div>
       <Hero />
       <div className="px-5">
-        <BuyersChoice title={"Buyers' choice"}/>
+        <BuyersChoice title={"Buyers' choice"} />
         <FactoryOrderPortfolio />
         <PhotoGallery />
         <ClientsReviews />

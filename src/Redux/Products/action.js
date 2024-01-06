@@ -32,9 +32,10 @@ export const fetchData = () => async (dispatch) => {
 // Do not use in cart page.
 export const addToCart = (productId, token) => async (dispatch) => {
     try {
+        console.log(token, productId)
         const config = {
             headers: {
-                'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NTk0NTZkZDNkM2Y4YjdlYmQwZWU2NjEiLCJpYXQiOjE3MDQzNzIxOTR9.CctDSpxm0F7CLB-ieK-MzYLIhs1DrGpcgh8tE2OK280`
+                'Authorization': `Bearer ${token}`
             }
         }
         const { data } = await axios.post(`${BASE_URI}/products/cart/${productId}`, {}, config)
@@ -50,13 +51,13 @@ export const getCartDataRequest = () => ({ type: CART_GET_REQUEST });
 export const getCartDataSuccess = (data) => ({ type: CART_GET_SUCCESS, payload: data });
 export const getCartDataFailure = (error) => ({ type: CART_GET_FAILURE, payload: error });
 
-export const fetchCartData = (userId, token) => async (dispatch) => {
+export const fetchCartData = (token) => async (dispatch) => {
     dispatch(getCartDataRequest());
-    try {
 
+    try {
         const config = {
             headers: {
-                "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI2NTk0NTZkZDNkM2Y4YjdlYmQwZWU2NjEiLCJpYXQiOjE3MDQzNzIxOTR9.CctDSpxm0F7CLB-ieK-MzYLIhs1DrGpcgh8tE2OK280`
+                "Authorization": `Bearer ${token}`
             }
         }
         const res = await axios.get(`${BASE_URI}/products/cart`, config); // Fix here
@@ -112,10 +113,15 @@ export const removeFromWishlist = (productId, userId, moveToCart) => async (disp
 };
 export const adjustQuantityInCart = (productId, userId, adjustment) => async (dispatch) => {
     try {
-        const userRef = doc(storeDB, 'users', userId);
-        const userSnapshot = await getDoc(userRef);
-        const userData = userSnapshot.data();
-        const cart = userData.cart.map(item => {
+
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        }
+        const { data } = await axios.get(`${BASE_URI}/products/cart`, config); // Fix here
+
+        const cart = data.cart.map(item => {
             // Check if the current item matches the product ID
             if (item.productId === productId) {
                 // If the adjustment is negative and the quantity is 1, return the item as is
@@ -137,40 +143,18 @@ export const adjustQuantityInCart = (productId, userId, adjustment) => async (di
 };
 
 
-export const removeFromCart = (productId, userId, wishlist) => async (dispatch) => {
+export const removeFromCart = (productId, token, wishlist) => async (dispatch) => {
     try {
-        // Reference to the user's document in the database
-        const userRef = doc(storeDB, 'users', userId);
-        // Retrieve the user's data
-        const userSnapshot = await getDoc(userRef);
-        const userData = userSnapshot.data();
-
-        // Check if the product is in the cart
-        const productInCart = userData.cart.find(item => item.productId === productId);
-
-        if (productInCart) {
-            // Start a batch write operation
-            const batch = writeBatch(storeDB);
-
-            // Remove the product from the cart
-            const newCart = userData.cart.filter(item => item.productId !== productId);
-            batch.update(userRef, { cart: newCart });
-
-            // If wishlist is true, add the product to the wishlist
-            if (wishlist) {
-                batch.update(userRef, {
-                    wishlist: arrayUnion(productId)
-                });
+        console.log(token)
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${token}`
             }
-
-            // Commit the batch write to the database
-            await batch.commit();
-            // Fetch the updated cart data
-            dispatch(fetchCartData(userId));
-        } else {
-            console.log(`Product with id ${productId} not found in cart.`);
         }
+        const res = await axios.delete(`${BASE_URI}/products/cart/${productId}`, config); // Fix here
+        console.log(res)
 
+        dispatch(fetchCartData(token));
     } catch (error) {
         console.log(error);
     }

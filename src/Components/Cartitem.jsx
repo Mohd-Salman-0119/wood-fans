@@ -1,25 +1,40 @@
 import { useEffect, useState } from "react";
 import { auth } from "../Services/firebaseConfig";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { adjustQuantityInCart } from "../Redux/Products/action";
-import { fetchSingleProductData } from "./Common/common";
+import axios from "axios";
+import { BASE_URI } from "../Redux/api";
 
 const Cartitem = ({ product, btnOnClick }) => {
   const { productId, quantity } = product;
   const [itemData, setItemData] = useState({});
   const [mainImg, setMainImg] = useState([]);
   const dispatch = useDispatch();
-  const userId = auth?.currentUser?.uid;
+
+  const token = useSelector((store) => store.authReducer.token);
+
   useEffect(() => {
-    fetchSingleProductData(productId, setMainImg, setItemData);
+    const fetchProductData = async () => {
+      try {
+        const { data } = await axios.get(`${BASE_URI}/products/${productId}`);
+        setItemData(data);
+        setMainImg(data?.images);
+        console.log(data);
+      } catch (error) {
+        console.log("Error fetching product data:", error);
+      }
+    };
+
+    fetchProductData();
   }, [productId]);
+
   const { category, name, price } = itemData;
 
   const increaseQuantity = () => {
-    dispatch(adjustQuantityInCart(productId, userId, 1));
+    dispatch(adjustQuantityInCart(productId, token, 1));
   };
   const decreaseQuantity = () => {
-    dispatch(adjustQuantityInCart(productId, userId, -1));
+    dispatch(adjustQuantityInCart(productId, token, -1));
   };
 
   return (
@@ -38,7 +53,7 @@ const Cartitem = ({ product, btnOnClick }) => {
             <div className="flex flex-wrap gap-2 py-5">
               <button
                 onClick={() => {
-                  btnOnClick("Remove", productId, userId);
+                  btnOnClick("Remove", productId, token);
                 }}
                 className="text-xs bg-primary-yellow p-1 rounded-sm cursor-pointer hover:text-white"
               >
@@ -46,7 +61,7 @@ const Cartitem = ({ product, btnOnClick }) => {
               </button>
               <button
                 onClick={() => {
-                  btnOnClick("Wishlist", productId, userId);
+                  btnOnClick("Wishlist", productId, token);
                 }}
                 className="text-xs bg-primary-yellow p-1 rounded-sm text-white cursor-pointer hover:text-black"
               >

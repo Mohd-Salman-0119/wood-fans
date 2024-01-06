@@ -37,8 +37,8 @@ const loginWithEmailAndPassword = (email, password, onSuccess) => async (dispatc
      try {
           dispatch(loginRequest())
           const { data } = await axios.post(`${BASE_URI}/login`, { email, password })
-
-          localStorage.setItem('userToken', data.token)
+          console.log(data)
+          // localStorage.setItem('userToken', data.token)
           dispatch(loginSuccess(data.token))
           onSuccess()
      } catch (error) {
