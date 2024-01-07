@@ -19,7 +19,6 @@ const Cartitem = ({ product, btnOnClick }) => {
         const { data } = await axios.get(`${BASE_URI}/products/${productId}`);
         setItemData(data);
         setMainImg(data?.images);
-        console.log(data);
       } catch (error) {
         console.log("Error fetching product data:", error);
       }

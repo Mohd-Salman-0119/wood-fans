@@ -1,1 +1,1 @@
-export const BASE_URI = 'https://agile-rose-woolens.cyclic.app/api'
+export const BASE_URI = 'https://long-pink-coypu-fez.cyclic.app/api'

@@ -13,12 +13,31 @@ const getProductController = asyncHandler(async (req, res) => {
 const getSingleProduct = asyncHandler(async (req, res) => {
      const ID = req.params.ID;
      try {
-          const products = await ProductModel.findOne({_id: ID});
+          const products = await ProductModel.findOne({ _id: ID });
           res.send(products)
      } catch (error) {
           res.send({ msg: "Something went wrong, Cannot get a products" })
      }
 })
+
+const addProductsQuentityCart = asyncHandler(async (req, res) => {
+     const newCarts = req.body;
+     try {
+          const userId = req.userID;
+          const user = await UserModel.findById(userId)
+          if (!user) {
+               res.status(500).json({ msg: "Feild to find user" })
+          }
+          user.cart = newCarts;
+
+          user.save();
+
+          res.status(200).json({ msg: "Cart updated successfully" })
+     } catch (error) {
+          res.status(401).json({ msg: "Something went wrong, Cannot add carts" })
+     }
+})
+
 const addProductIntoCart = asyncHandler(async (req, res) => {
      const productId = req.params.ID;
 
@@ -162,4 +181,4 @@ const getWishListController = asyncHandler(async (req, res) => {
      }
 })
 
-module.exports = { getProductController, addProductIntoCart, removeProductFromCart, addProductIntoWishlist, removeProductFromWishlist, getCartController, getWishListController,getSingleProduct }
+module.exports = { getProductController, addProductIntoCart, removeProductFromCart, addProductIntoWishlist, removeProductFromWishlist, getCartController, getWishListController, getSingleProduct, addProductsQuentityCart }

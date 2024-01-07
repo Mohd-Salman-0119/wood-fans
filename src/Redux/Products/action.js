@@ -11,14 +11,6 @@ export const getDataFailure = (error) => ({ type: DATA_GET_FAILURE, payload: err
 export const fetchData = () => async (dispatch) => {
     dispatch(getDataRequest());
     try {
-        /*
-        let tempData = [];
-        const q = query(collection(storeDB, "products"));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((product) => {
-            tempData.push({ ...product.data(), id: product.id });
-        });
-        */
         const res = await axios.get(`${BASE_URI}/products`);
 
         dispatch(getDataSuccess(res.data));
@@ -111,37 +103,31 @@ export const removeFromWishlist = (productId, userId, moveToCart) => async (disp
         console.log(error);
     }
 };
-export const adjustQuantityInCart = (productId, userId, adjustment) => async (dispatch) => {
+export const adjustQuantityInCart = (productId, token, adjustment) => async (dispatch) => {
     try {
-
-        const config = {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
+      const config = {
+        headers: {
+          "Authorization": `Bearer ${token}`
         }
-        const { data } = await axios.get(`${BASE_URI}/products/cart`, config); // Fix here
-
-        const cart = data.cart.map(item => {
-            // Check if the current item matches the product ID
-            if (item.productId === productId) {
-                // If the adjustment is negative and the quantity is 1, return the item as is
-                if (adjustment < 0 && item.quantity === 1) {
-                    return item;
-                }
-                // Otherwise, adjust the quantity
-                return { ...item, quantity: Math.max(0, item.quantity + adjustment) };
-            }
-            // If the current item does not match the product ID, return it unchanged
+      }
+      const { data } = await axios.get(`${BASE_URI}/products/cart`, config);
+      const cart = data.map(item => {
+        if (item.productId === productId) {
+          if (adjustment < 0 && item.quantity === 1) {
             return item;
-        });
-
-        await updateDoc(userRef, { cart });
-        dispatch(fetchCartData(userId));
+          }
+          return { ...item, quantity: Math.max(0, item.quantity + adjustment) };
+        }
+        return item;
+      });
+      console.log(cart)
+    //   await axios.put(`${BASE_URI}/products/cart`, { cart }, config); // Update the cart on the server
+      dispatch(fetchCartData(token));
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-};
-
+  };
+  
 
 export const removeFromCart = (productId, token, wishlist) => async (dispatch) => {
     try {

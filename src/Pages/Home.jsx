@@ -8,10 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 import PhotoGallery from "../Components/Homepage/PhotoGallery";
 import ContactUs from "../Components/Homepage/ContactUs";
 import ClientsReviews from "../Components/Common/ClientsReviews";
+import { fetchCartData } from "../Redux/Products/action";
 function Home() {
-  const isAuth = useSelector((store) => store.authReducer.isAuth);
-
-  console.log(isAuth);
+  const token = useSelector((store) => store.authReducer.token);
+  const dispatch  = useDispatch();
+  
+  if(token){
+    dispatch(fetchCartData(token))
+  }
+  console.log(token);
   return (
     <div>
       <Hero />
