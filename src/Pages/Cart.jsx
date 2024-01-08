@@ -44,9 +44,6 @@ const cart = () => {
     }
   };
 
-  // // Example usage:
-  // const couponCode = "team3"; // Case-insensitive coupon code
-  // const subtotal = 100; // Replace with your actual subtotal
   const handleCouponChange = () => {
     const couponResult = handleCouponChangeFunction(coupon, subtotalValue);
     setDiscount(couponResult.discount);
@@ -68,7 +65,10 @@ const cart = () => {
     }
   };
 
-  const toCheckout = () => navigate("/checkout");
+  const toCheckout = () => {
+    localStorage.setItem("cartTotal", subtotalValue);
+    navigate("/checkout");
+  };
 
   return (
     <div className="w-full bg-gray-100">
@@ -153,7 +153,13 @@ const cart = () => {
                       Submit
                     </button>
                   </div>
-                  <p className={`mt-2 text-sm ${message === 'Invalid coupon.' ? 'text-red-500' : 'text-green-500'}`}>
+                  <p
+                    className={`mt-2 text-sm ${
+                      message === "Invalid coupon."
+                        ? "text-red-500"
+                        : "text-green-500"
+                    }`}
+                  >
                     <span className="font-medium">{message}</span>
                   </p>
                 </div>
