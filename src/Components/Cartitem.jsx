@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { auth } from "../Services/firebaseConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { adjustQuantityInCart } from "../Redux/Products/action";
 import axios from "axios";

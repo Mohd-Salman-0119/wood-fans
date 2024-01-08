@@ -65,12 +65,17 @@ export const fetchCartData = (token) => async (dispatch) => {
 
 
 // Do not use in cart page.
-export const addToWishlist = (productId, userId) => async (dispatch) => {
+export const addToWishlist = (productId, token) => async (dispatch) => {
     try {
-        const userRef = doc(storeDB, 'users', userId);
-        await updateDoc(userRef, {
-            wishlist: arrayUnion(productId)
-        });
+        console.log(token, productId)
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }
+        const { data } = await axios.post(`${BASE_URI}/products/wishlist/${productId}`, {}, config)
+        console.log(data)
+        dispatch(fetchCartData());
     } catch (error) {
         console.log(error);
     }
@@ -105,29 +110,28 @@ export const removeFromWishlist = (productId, userId, moveToCart) => async (disp
 };
 export const adjustQuantityInCart = (productId, token, adjustment) => async (dispatch) => {
     try {
-      const config = {
-        headers: {
-          "Authorization": `Bearer ${token}`
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         }
-      }
-      const { data } = await axios.get(`${BASE_URI}/products/cart`, config);
-      const cart = data.map(item => {
-        if (item.productId === productId) {
-          if (adjustment < 0 && item.quantity === 1) {
+        const { data } = await axios.get(`${BASE_URI}/products/cart`, config);
+        const cart = data.map(item => {
+            if (item.productId === productId) {
+                if (adjustment < 0 && item.quantity === 1) {
+                    return item;
+                }
+                return { ...item, quantity: Math.max(0, item.quantity + adjustment) };
+            }
             return item;
-          }
-          return { ...item, quantity: Math.max(0, item.quantity + adjustment) };
-        }
-        return item;
-      });
-      console.log(cart)
-    //   await axios.put(`${BASE_URI}/products/cart`, { cart }, config); // Update the cart on the server
-      dispatch(fetchCartData(token));
+        });
+        await axios.post(`${BASE_URI}/products/cart`, cart, config); // Update the cart on the server
+        dispatch(fetchCartData(token))
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  };
-  
+};
+
 
 export const removeFromCart = (productId, token, wishlist) => async (dispatch) => {
     try {

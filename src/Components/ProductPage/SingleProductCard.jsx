@@ -1,7 +1,6 @@
 import React from "react";
 import Button from "../Common/Button";
 import { useState } from "react";
-import { onAuthStateChanged, auth } from "./../../Services/firebaseConfig";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 

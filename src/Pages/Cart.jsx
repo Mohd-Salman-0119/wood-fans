@@ -9,7 +9,6 @@ import { fetchPricesAndCalculateSubtotal } from "../Components/Common/common";
 
 const cart = () => {
   const { cartData } = useSelector((store) => store.cartReducer);
- 
 
   const dispatch = useDispatch();
   const [cartItemsCount, setcartItemsCount] = useState(0);
@@ -22,15 +21,36 @@ const cart = () => {
 
   const navigate = useNavigate();
 
-  const handleCouponChange = (couponCode, subtotal) => {
+  const handleCouponChangeFunction = (couponCode, subtotal) => {
     const upperCoupon = couponCode.toUpperCase();
-    return upperCoupon === "TEAM3"
-      ? {
-          text: "You got 30% off!",
-          color: "text-green-600",
-          discount: subtotal * 0.3,
-        }
-      : { text: "Invalid coupon.", color: "text-red-600", discount: 0 };
+
+    if (upperCoupon === "TEAM3") {
+      // Valid coupon code "TEAM3"
+      const discountAmount = subtotal * 0.3;
+      setDiscount(subtotal - discountAmount);
+      setMessage("You got 30% off!");
+      return {
+        text: "You got 30% off!",
+        color: "text-green-600",
+        discount: discountAmount,
+      };
+    } else {
+      // Invalid coupon code
+      return {
+        text: "Invalid coupon.",
+        color: "text-red-600",
+        discount: 0,
+      };
+    }
+  };
+
+  // // Example usage:
+  // const couponCode = "team3"; // Case-insensitive coupon code
+  // const subtotal = 100; // Replace with your actual subtotal
+  const handleCouponChange = () => {
+    const couponResult = handleCouponChangeFunction(coupon, subtotalValue);
+    setDiscount(couponResult.discount);
+    setMessage(couponResult.text);
   };
 
   useEffect(() => {
@@ -133,8 +153,8 @@ const cart = () => {
                       Submit
                     </button>
                   </div>
-                  <p className={`mt-2 text-sm ${message.color}`}>
-                    <span className="font-medium">{message.text}</span>
+                  <p className={`mt-2 text-sm ${message === 'Invalid coupon.' ? 'text-red-500' : 'text-green-500'}`}>
+                    <span className="font-medium">{message}</span>
                   </p>
                 </div>
                 <div className="py-4 border-b-2 border-gray-100">

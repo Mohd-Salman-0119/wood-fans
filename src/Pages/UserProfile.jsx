@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UserDetailsSection from "../Components/UserProfile/UserDetailsSection";
 import { storeDB, auth, doc, getDoc } from "../Services/firebaseConfig";
-import { fetchUserData } from "../Components/Common/common";
 
 function UserProfile() {
   const [current, setCurrent] = useState("My Profile");
@@ -11,15 +10,15 @@ function UserProfile() {
     setCurrent(section);
   };
 
-  useEffect(() => {
-    let unsubscribe;
+  // useEffect(() => {
+  //   let unsubscribe;
 
-    fetchUserData(setUid, setUserData).then((unsub) => {
-      unsubscribe = unsub;
-    });
+  //   fetchUserData(setUid, setUserData).then((unsub) => {
+  //     unsubscribe = unsub;
+  //   });
 
-    return () => unsubscribe && unsubscribe();
-  }, []);
+  //   return () => unsubscribe && unsubscribe();
+  // }, []);
 
   return (
     <div>

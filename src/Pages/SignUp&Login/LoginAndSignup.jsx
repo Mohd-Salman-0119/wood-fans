@@ -10,9 +10,6 @@ import {
 import Signup from "./Signup";
 import Login from "./Login";
 import { useDispatch, useSelector } from "react-redux";
-import { loginWithFacebook, loginWithGoogle } from "../../Redux/Auth/action";
-import PopUpDialog from "../../Components/Common/PopUpDialog";
-import { greenTik, worngTik } from "../../assets/animation/animi";
 import { useNavigate } from "react-router-dom";
 
 const LoginAndSignup = () => {
@@ -36,36 +33,10 @@ const LoginAndSignup = () => {
   };
 
 
-  // console.log(errorMessage,successMessage)
-
-  // const handleSuccessMessage = () => {
-  //   setShowPopup({
-  //     message: successMessage,
-  //     lottie: "success",
-  //     show: true,
-  //   });
-  //   setShow(!show)
-  // };
-  // const handleErrorMessage = () => {
-  //   setShowPopup({
-  //     message: errorMessage,
-  //     lottie: "error",
-  //     show: true,
-  //   });
-    
-  //   setShow(!show)
-  // };
-
   
 
   const handleLoginAndSign = () => {
     setIsLogin((p) => !p);
-  };
-  const handleLoginWithGoogle = () => {
-    dispatch(loginWithGoogle(redirectToHome));
-  };
-  const handleLoginWithFacebook = () => {
-    dispatch(loginWithFacebook(redirectToHome));
   };
   return (
     <div
@@ -81,18 +52,18 @@ const LoginAndSignup = () => {
           <Login onClick={handleLoginAndSign} />
         )}
 
-        <div className="grid grid-cols-2 gap-4 mt-3">
+        <div className="hidden grid-cols-2 gap-4 mt-3">
           <ImageButton
             image={facebookIcon}
             className="bg-[#4267b2] md:text-md 2sm:text-[15px] xl:text-lg"
             text="Login with Facebook"
-            onClick={handleLoginWithFacebook}
+          
           />
           <ImageButton
             image={googleIcon}
             className="bg-[#4285F4] md:text-md 2sm:text-[15px] xl:text-lg"
             text="Login with Google"
-            onClick={handleLoginWithGoogle}
+          
           />
         </div>
       </div>

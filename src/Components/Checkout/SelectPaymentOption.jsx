@@ -8,7 +8,9 @@ function SelectPaymentOption() {
   const [Razorpay, isLoaded] = useRazorpay();
   const [showThankYou, setShowThankYou] = useState(false);
   const navigate = useNavigate();
+  
   let cartTotal = localStorage.getItem("cartTotal");
+
   if (cartTotal) {
     cartTotal = parseFloat(cartTotal);
   } else {

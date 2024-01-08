@@ -4,11 +4,6 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, FacebookAuthProvider, onAuthStateChanged } from 'firebase/auth'
 import { getFirestore, collection, query, where, getDocs, addDoc, getDoc, arrayUnion, doc, updateDoc, arrayRemove, writeBatch } from 'firebase/firestore'
 
-
-
-// TODO: Add SDKs for Firebase products that you want to use
-
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
      apiKey: import.meta.env.VITE_FIREBASE_API_KEY,

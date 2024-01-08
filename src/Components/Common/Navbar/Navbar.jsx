@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import shoppingbag from "../../../assets/shoppingbag.svg";
 import Button from "../Button";
 import { fetchCartData } from "../../../Redux/Products/action";
-import { fetchUserData } from "../common";
+
 
 const Navbar = () => {
   const { cartData } = useSelector((store) => store.cartReducer);
@@ -37,15 +37,15 @@ const Navbar = () => {
 
   // Firebase get user
 
-  useEffect(() => {
-    let unsubscribe;
+  // useEffect(() => {
+  //   let unsubscribe;
 
-    fetchUserData(setUid, setUserData).then((unsub) => {
-      unsubscribe = unsub;
-    });
+  //   fetchUserData(setUid, setUserData).then((unsub) => {
+  //     unsubscribe = unsub;
+  //   });
 
-    return () => unsubscribe && unsubscribe();
-  }, []);
+  //   return () => unsubscribe && unsubscribe();
+  // }, []);
 
   // Mobile menu and navigator functions.
   const toggleMobileMenu = () => {

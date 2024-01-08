@@ -27,7 +27,7 @@ const OrderConfirmation = () => {
           <svg xmlns="http://www.w3.org/2000/svg" className="text-green-600 w-28 h-28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <h1 className="text-4xl font-bold font-extrabold text-transparent bg-clip-text bg-primary-yellow">Order Placed !</h1>
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-primary-yellow">Order Placed !</h1>
           <p>Redirecting to Home in {count} seconds</p>
           </div>
       </div>

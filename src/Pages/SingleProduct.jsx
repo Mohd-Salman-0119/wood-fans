@@ -20,7 +20,6 @@ import ImageColumn from "../Components/Common/ImageColumn";
 import ClientsReviews from "../Components/Common/ClientsReviews";
 import RandomProducts from "../Components/Common/RandomProducts";
 import { useEffect } from "react";
-import { storeDB, getDoc, auth, doc } from "../Services/firebaseConfig";
 import { useState } from "react";
 import PopupMessage from "../Components/Common/PopupMessage";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +33,7 @@ const SingleProduct = () => {
   const { id } = useParams();
   const token = useSelector((store) => store.authReducer.token);
 
-  const userId = auth?.currentUser?.uid;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);

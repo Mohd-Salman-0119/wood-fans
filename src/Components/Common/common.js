@@ -1,4 +1,7 @@
-import { storeDB, auth, doc, getDoc, collection, getDocs, query, where } from '../../Services/firebaseConfig';
+import axios from 'axios';
+import { BASE_URI } from '../../Redux/api';
+
+
 export function filterByCategoryAndNameLength(category, setCurrentProducts, productData) {
     if (!productData) {
         return;
@@ -20,7 +23,7 @@ export function filterByCategoryAndNameLength(category, setCurrentProducts, prod
 }
 
 
-
+/*
 export async function fetchUserData(setUid, setUserData) {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
         if (user) {
@@ -40,7 +43,7 @@ export async function fetchUserData(setUid, setUserData) {
     return unsubscribe;
 }
 
-/*
+
 export const fetchSingleProductData = async (productId, setMainImg, setItemData) => {
     try {
         const productDocRef = doc(storeDB, "products", productId);
@@ -60,11 +63,10 @@ export const fetchPricesAndCalculateSubtotal = async (cartData, setSubtotalValue
     try {
         let subtotal = 0;
         for (const item of cartData) {
-            const docRef = doc(storeDB, "products", item.productId);
-            const docSnap = await getDoc(docRef);
+            const { data } = await axios.get(`${BASE_URI}/products/${item.productId}`);
 
-            if (docSnap.exists()) {
-                subtotal += docSnap.data().price * item.quantity;
+            if (data) {
+                subtotal += data.price * item.quantity;
             } else {
                 console.log(`No document found for productId: ${item.productId}`);
             }
