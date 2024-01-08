@@ -18,7 +18,7 @@ const Signup = ({ onClick }) => {
   const navigate = useNavigate();
 
   const redirectToHome = () => {
-    navigate("/");
+    onClick()
   };
 
   const theme = useSelector((store) => store.themeReducer.theme);
@@ -35,12 +35,13 @@ const Signup = ({ onClick }) => {
     toast.error(errorMessage);
   }
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
     if (!email && !name && !password) {
       toast.info("Fill all the feild.");
     }
-    dispatch(signUpNewUser(email, password, name, redirectToHome));
+    await dispatch(signUpNewUser(email, password, name));
+    onClick()
   };
 
   return (
