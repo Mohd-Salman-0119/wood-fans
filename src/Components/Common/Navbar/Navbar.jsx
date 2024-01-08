@@ -5,29 +5,22 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import shoppingbag from "../../../assets/shoppingbag.svg";
 import Button from "../Button";
-import { fetchCartData } from "../../../Redux/Products/action";
-
+import axios from "axios";
+import { BASE_URI } from "../../../Redux/api";
 
 const Navbar = () => {
   const { cartData } = useSelector((store) => store.cartReducer);
+  const { token, isAuth } = useSelector((store) => store.authReducer);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [userData, setUserData] = useState(null);
-  const [uid, setUid] = useState("");
-
-  const [search, setSearch] = useState("");
   const [isMobileMenuActive, setMobileMenuActive] = useState(false);
   const [cartValue, setCartValue] = useState(0);
   const [authStatus, setAuthStatus] = useState(null);
   let userName = userData?.name?.split(" ");
+
   const isMounted = useRef(true);
-  useEffect(() => {
-    if (uid) {
-      setAuthStatus(true);
-      dispatch(fetchCartData(uid));
-    }
-  }, [uid]);
 
   useEffect(() => {
     if (cartData?.length > 0) {
@@ -35,17 +28,22 @@ const Navbar = () => {
     }
   }, [cartData]);
 
-  // Firebase get user
-
-  // useEffect(() => {
-  //   let unsubscribe;
-
-  //   fetchUserData(setUid, setUserData).then((unsub) => {
-  //     unsubscribe = unsub;
-  //   });
-
-  //   return () => unsubscribe && unsubscribe();
-  // }, []);
+  useEffect(() => {
+    const fetchUser = async (token) => {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      try {
+        const { data } = await axios.get(`${BASE_URI}/user`, config);
+        setUserData(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUser(token);
+  }, [token]);
 
   // Mobile menu and navigator functions.
   const toggleMobileMenu = () => {
@@ -137,7 +135,7 @@ const Navbar = () => {
                   </div> */}
 
                   <div className="max-sm:hidden">
-                    {authStatus ? (
+                    {isAuth ? (
                       <div className="relative">
                         <p
                           className="font-medium text-sm cursor-pointer flex items-center"

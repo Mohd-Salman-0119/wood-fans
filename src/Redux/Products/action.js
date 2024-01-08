@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { storeDB, query, collection, getDoc, getDocs, doc, updateDoc, arrayUnion, arrayRemove, writeBatch } from '../../Services/firebaseConfig'
 import { DATA_GET_REQUEST, DATA_GET_SUCCESS, DATA_GET_FAILURE, CART_GET_REQUEST, CART_GET_SUCCESS, CART_GET_FAILURE, WISHLIST_GET_REQUEST, WISHLIST_GET_SUCCESS, WISHLIST_GET_FAILURE } from './actionTypes';
 import { BASE_URI } from '../api'
 
@@ -82,7 +81,9 @@ export const addToWishlist = (productId, token) => async (dispatch) => {
 };
 
 export const removeFromWishlist = (productId, userId, moveToCart) => async (dispatch) => {
+    /*
     try {
+
         const userRef = doc(storeDB, 'users', userId);
         const batch = writeBatch(storeDB);
 
@@ -107,7 +108,9 @@ export const removeFromWishlist = (productId, userId, moveToCart) => async (disp
     } catch (error) {
         console.log(error);
     }
+    */
 };
+
 export const adjustQuantityInCart = (productId, token, adjustment) => async (dispatch) => {
     try {
         const config = {
@@ -158,6 +161,7 @@ export const getWishlistDataFailure = (error) => ({ type: WISHLIST_GET_FAILURE, 
 
 export const fetchWishlistData = (userId) => async (dispatch) => {
     dispatch(getWishlistDataRequest());
+    /*
     try {
         const userRef = doc(storeDB, 'users', userId);
         const userSnap = await getDoc(userRef);
@@ -168,10 +172,12 @@ export const fetchWishlistData = (userId) => async (dispatch) => {
         console.log(error);
         dispatch(getWishlistDataFailure(error));
     }
+    */
 };
 
 
 export const postData = (dataArray) => async (dispatch) => {
+    /*
     try {
         const batch = writeBatch(storeDB);
         dataArray.forEach((data) => {
@@ -182,4 +188,6 @@ export const postData = (dataArray) => async (dispatch) => {
     } catch (error) {
         console.log(error);
     }
+    */
 };
+

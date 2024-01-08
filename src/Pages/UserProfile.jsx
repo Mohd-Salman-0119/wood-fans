@@ -1,24 +1,37 @@
 import React, { useState, useEffect } from "react";
 import UserDetailsSection from "../Components/UserProfile/UserDetailsSection";
-import { storeDB, auth, doc, getDoc } from "../Services/firebaseConfig";
+import axios from "axios";
+import { BASE_URI } from "../Redux/api";
+import { useSelector } from "react-redux";
+
 
 function UserProfile() {
+  const { token, isAuth } = useSelector((store) => store.authReducer);
+
   const [current, setCurrent] = useState("My Profile");
   const [userData, setUserData] = useState(null);
-  const [uid, setUid] = useState("");
   const handleClick = (section) => {
     setCurrent(section);
   };
 
-  // useEffect(() => {
-  //   let unsubscribe;
+  useEffect(() => {
+    const fetchUser = async (token) => {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      try {
+        const { data } = await axios.get(`${BASE_URI}/user`, config);
+        setUserData(data);
+      
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchUser(token);
+  }, [token]);
 
-  //   fetchUserData(setUid, setUserData).then((unsub) => {
-  //     unsubscribe = unsub;
-  //   });
-
-  //   return () => unsubscribe && unsubscribe();
-  // }, []);
 
   return (
     <div>
@@ -56,7 +69,7 @@ function UserProfile() {
           </div>
         </div>
         {current === "My Profile" && (
-          <UserDetailsSection userData={userData} uid={uid} />
+          <UserDetailsSection userData={userData}/>
         )}
       </div>
     </div>
