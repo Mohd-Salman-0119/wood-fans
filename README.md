@@ -31,7 +31,7 @@ Discover our expertise in four primary categories:
 
 ## Live Demo
 
-- [🚀 Explore Wood Fans](https://obscene-clam-8417.vercel.app/)
+- [🚀 Explore Wood Fans](https://wood-fans-drab.vercel.app/)
 
 ## Features
 
@@ -48,9 +48,8 @@ Discover our expertise in four primary categories:
 - **Frontend:** React, Redux, CSS
 - **Fetching:** Axios
 - **Routing:** React-router-dom
-- **Authentication:** Firebase
-- **Database:** Firestore Database
-- **Payment:** RazorPay
+- **Database:** MongoDB
+- **Payment:** Razorpay
 - **Deployment:** Vercel
 
 ## Screenshots
